@@ -2,15 +2,18 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
+const apiRoutes = require('./apiRoutes');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // In-memory user store (use a database in real projects)
 const users = [];
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/api', apiRoutes);
 
 // Secret key for JWT (in real apps, store it in an environment variable)
 const JWT_SECRET = 'your_jwt_secret_key';
