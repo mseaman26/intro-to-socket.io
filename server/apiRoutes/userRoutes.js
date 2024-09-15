@@ -35,8 +35,6 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    //TODO: delete the console.log
-    console.log('email:', email, 'password:', password);
     try{
         const user = await User.findOne({where: {email}});
         if(!user){
