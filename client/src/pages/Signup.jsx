@@ -1,18 +1,43 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../utils/authContext';
+import Auth from '../utils/auth'
+
 
 const Signup = () => {
+    const { user, setUser } = React.useContext(AuthContext);
     // State for form fields
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const navigate = useNavigate();
 
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle signup logic here
-        console.log('Email:', email);
-        console.log('Password:', password);
+        fetch('/api/users/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                // Redirect to home page
+                const token = data.token;
+                Auth.login(token);
+                setUser(data.user);
+                navigate('/');
+            })
+            .catch(err => {
+                console.error(err);
+                setError('Error signing up. Please try again.');
+            });
     };
 
     return (
@@ -52,6 +77,7 @@ const Signup = () => {
             <div style={styles.linkContainer}>
                 <p>Already have an account? <Link to="/login" style={styles.link}>Log In</Link></p>
             </div>
+            <h1>{error}</h1>
         </div>
     );
 }
