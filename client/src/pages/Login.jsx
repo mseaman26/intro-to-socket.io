@@ -1,18 +1,60 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../utils/authContext';
+import Auth from '../utils/auth';
 
 const Login = () => {
+    const navigate = useNavigate();
+    // Get user and setUser from AuthContext
+    const { user, setUser } = React.useContext(AuthContext);
+
     // State for form fields
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log('Email:', email);
-        console.log('Password:', password);
+        // Handle signup logic here
+        fetch('/api/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if(data.message){
+                    return setError(data.message);
+                }
+                // Redirect to home page
+                const token = data.token;
+                Auth.login(token);
+                setUser(data.user);
+                navigate('/');
+            })
+            .catch(err => {
+                console.log(err);
+                setError('Error signing up. Please try again.');
+            });
     };
+
+    //if user is logged in, redirect to home page
+    useEffect(() => {
+        if (user) {
+            navigate('/');
+        }else{
+            setLoading(false);
+        }
+    }, [user]);
+
+    if (loading) {
+        // Optionally show a spinner or placeholder while loading
+        return <div>Loading...</div>;
+    }
 
     return (
         <div style={styles.container}>
@@ -44,6 +86,7 @@ const Login = () => {
             <div style={styles.linkContainer}>
                 <p>Don't have an account? <Link to="/signup" style={styles.link}>Sign Up</Link></p>
             </div>
+            <h1>{error}</h1>
         </div>
     );
 }
