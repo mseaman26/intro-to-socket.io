@@ -13,7 +13,7 @@ const Home = () => {
     return (
         <div style={styles.container}>
             <h1 style={styles.heading}>Home</h1>
-            <p style={styles.welcomeMessage}>Welcome to the home page, {user ? user.username : 'Guest'}</p>
+            <p style={styles.welcomeMessage}>Welcome to the home page, {user ? user.data.username : ''}</p>
             <button style={styles.logoutButton} onClick={handleLogout}>
                 Logout
             </button>

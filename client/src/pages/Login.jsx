@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../utils/authContext';
-import Auth from '../utils/auth';
+
 
 const Login = () => {
     const navigate = useNavigate();
     // Get user and setUser from AuthContext
-    const { user, setUser } = React.useContext(AuthContext);
+    const { user, loggedIn, setToken } = React.useContext(AuthContext);
 
     // State for form fields
     const [email, setEmail] = useState('');
@@ -31,9 +31,8 @@ const Login = () => {
                     return setError(data.message);
                 }
                 // Redirect to home page
-                const token = data.token;
-                Auth.login(token);
-                setUser(data.user);
+                const newToken = data.token;
+                setToken(prior => prior = newToken);
                 navigate('/');
             })
             .catch(err => {
@@ -44,7 +43,7 @@ const Login = () => {
 
     //if user is logged in, redirect to home page
     useEffect(() => {
-        if (user) {
+        if (loggedIn) {
             navigate('/');
         }else{
             setLoading(false);

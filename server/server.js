@@ -40,12 +40,13 @@ io.use((socket, next) => {
     if (token) {
         console.log('token:', token);
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return next(new Error("Authentication error"));
-        }
-        // Attach user ID and username to the socket object
-        socket.user = { id: decoded.id, username: decoded.username };
-        next();
+            if (err) {
+                return next(new Error("Authentication error"));
+            }
+            console.log('decoded:', decoded);
+            // Attach user ID and username to the socket object
+            socket.user = {  username: decoded.data.username, id: decoded.data.id };
+            next();
         });
     } else {
         next(new Error("Authentication error"));
@@ -54,6 +55,7 @@ io.use((socket, next) => {
   
 io.on("connection", (socket) => {
     console.log("User connected:", socket.user);
+    console.log('user in connection event:', socket.user);
 
     // Access the user ID or username during the socket session
     const userId = socket.user.id;

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../utils/authContext';
-import Auth from '../utils/auth'
+
 
 
 const Signup = () => {
-    const { user, setUser } = React.useContext(AuthContext);
+    const { user, setUser, loggedIn, setToken } = React.useContext(AuthContext);
     // State for form fields
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -29,9 +29,8 @@ const Signup = () => {
             .then(data => {
                 console.log(data);
                 // Redirect to home page
-                const token = data.token;
-                Auth.login(token);
-                setUser(data.user);
+                const newToken = data.token;
+                setToken(prior => prior = newToken);
                 navigate('/');
             })
             .catch(err => {

@@ -23,8 +23,11 @@ router.post('/signup', async (req, res) => {
             username, 
             password
         });
+        const plainUser = newUser.get({plain: true});   
+        const tokenData = { email: plainUser.email, username: plainUser.username, id: plainUser.id };
+        console.log('tokenData:', tokenData);
+        const token = signToken(tokenData);
 
-        const token = signToken(newUser);
 
         res.status(200).json({token, user: newUser});
 
@@ -44,14 +47,14 @@ router.post('/login', async (req, res) => {
         if(!user){
             return res.status(400).json({message: 'Invalid email or password'});
         }
-
+        const plainUser = user.get({plain: true});
         const validPassword = await user.isCorrectPassword(password);
         if(!validPassword){
             return res.status(400).json({message: 'Invalid email or password'});
         }
 
-        const token = signToken(user);
-        res.status(200).json({token, user});
+        const token = signToken(plainUser);
+        res.status(200).json({token, plainUser});
 
     }catch(err){
         console.error(err);
