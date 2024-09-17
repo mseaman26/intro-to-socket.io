@@ -22,7 +22,6 @@ const Home = () => {
         if (message.trim() !== '') {
             // Add the message to the messages array
             console.log('socket in sendMessage:', socket);
-            setMessages([...messages, message]);
             setMessage(''); // Clear the input after sending
             socket.emit('message', message);
         }
@@ -32,7 +31,18 @@ const Home = () => {
     //     const longMessagesArray = Array.from({ length: 50 }, (_, i) => `This is message number ${i + 1}`);
     //     setMessages(longMessagesArray);
     // }, [])
-    
+    useEffect(() => {
+        if (socket) {
+            socket.on('message', (data) => {
+                setMessages((prior) => [...prior, `${data.from}: ${data.message}`]);
+            });
+        }
+        return () => {
+            if (socket) {
+                socket.off('message');
+            }
+        };
+    }, [socket])
 
     return (
         <div style={styles.container}>

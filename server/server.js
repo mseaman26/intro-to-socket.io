@@ -62,8 +62,6 @@ io.on("connection", (socket) => {
     const userId = socket.user.id;
     const username = socket.user.username;
 
-    // Example: Emit a welcome message to the user
-    socket.emit("welcome", `Welcome, ${username}! Your ID is ${userId}`);
 
     socket.on("disconnect", () => {
         console.log(`User ${username} disconnected`);
@@ -72,12 +70,10 @@ io.on("connection", (socket) => {
         console.log('message: ', msg);
         console.log('from: ', socket.user.username);
         console.log('id: ', socket.user.id);
+        io.emit('message', { message: msg, from: socket.user.username });
     })
 });
 
-io.on('message', (msg) => {
-    console.log('message: ', msg);
-})
 
   
 
