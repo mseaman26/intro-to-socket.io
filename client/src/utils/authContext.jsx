@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if(token && !Auth.isTokenExpired(token)){
             
-            setUser(Auth.getProfile());
-            setLoggedIn(Auth.loggedIn());
+            setUser(prior =>Auth.getProfile());
+            setLoggedIn(prior => Auth.loggedIn());
             Auth.login(token);
 
             if(!socket){
