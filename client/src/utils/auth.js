@@ -15,14 +15,19 @@ class AuthService {
   }
 
   isTokenExpired(token) {
+    console.log('token inside isTokenExpired:', token);
     // Decode the token to get its expiration time that was set by the server
     const decoded = jwtDecode(token);
     // If the expiration time is less than the current time (in seconds), the token is expired and we return `true`
-    if (jwtDecode.exp < Date.now() / 1000) {
+    if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem('id_token');
       return true;
     }
     // If token hasn't passed its expiration time, return `false`
+    //console log formatted date and time of token expiration
+    console.log('decoded token:', decoded);
+    console.log('token expiration time:', new Date(decoded.exp * 1000).toLocaleString());
+    console.log('token not expired inside isTokenExpired');
     return false;
   }
 

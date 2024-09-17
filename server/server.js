@@ -56,6 +56,7 @@ io.use((socket, next) => {
 io.on("connection", (socket) => {
     console.log("User connected:", socket.user);
     console.log('user in connection event:', socket.user);
+    console.log('socket id:', socket.id);   
 
     // Access the user ID or username during the socket session
     const userId = socket.user.id;
@@ -67,7 +68,17 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         console.log(`User ${username} disconnected`);
     });
+    socket.on('message', (msg) => {
+        console.log('message: ', msg);
+        console.log('from: ', socket.user.username);
+        console.log('id: ', socket.user.id);
+    })
 });
+
+io.on('message', (msg) => {
+    console.log('message: ', msg);
+})
+
   
 
 sequelize.sync({ force: false }).then(() => {

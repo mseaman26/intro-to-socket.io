@@ -21,11 +21,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const savedToken = Auth.getToken();
-
-        //TODO: delete this if statement
-        if(savedToken && Auth.isTokenExpired(savedToken)){
-            alert('Token expired');
-        }
         setToken(prior => prior = savedToken);
         
         if(savedToken && !Auth.isTokenExpired(savedToken)){
@@ -71,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     }, [token])
 
     return (
-        <AuthContext.Provider value={{ user, setUser, loggedIn, token, setToken }}>
+        <AuthContext.Provider value={{ user, setUser, loggedIn, token, setToken, socket }}>
             {children}
         </AuthContext.Provider>
     );
