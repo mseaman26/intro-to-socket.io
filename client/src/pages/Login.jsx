@@ -8,7 +8,6 @@ const Login = () => {
     // Get user and setUser from AuthContext
     const { user, loggedIn, setToken } = useContext(AuthContext);
 
-    // State for form fields
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(true);
@@ -17,7 +16,6 @@ const Login = () => {
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle signup logic here
         fetch('/api/users/login', {
             method: 'POST',
             headers: {
@@ -30,7 +28,6 @@ const Login = () => {
                 if(data.message){
                     return setError(data.message);
                 }
-                // Redirect to home page
                 const newToken = data.token;
                 setToken(prior => prior = newToken);
                 navigate('/');
@@ -90,7 +87,6 @@ const Login = () => {
     );
 }
 
-// Styles object
 const styles = {
     container: {
         display: 'flex',
