@@ -4,10 +4,7 @@ import { AuthContext } from '../utils/authContext'; // Adjust the path if needed
 import auth from '../utils/auth';
 
 const ProtectedRoute = ({ element }) => {
- 
   const { token  } = useContext(AuthContext);
-  console.log('ProtectedRoute token:', token);
-
   return (token && !auth.isTokenExpired(token)) ? element : <Navigate to="/login" />;
 };
 

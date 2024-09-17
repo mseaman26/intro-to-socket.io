@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../utils/authContext.jsx';
-import Auth from '../utils/auth'; // Make sure you have a logout method in Auth
+import Auth from '../utils/auth'; 
 import MessagesDisplay from '../components/MessagesDisplay.jsx';
 
 const Home = () => {
@@ -9,8 +9,8 @@ const Home = () => {
     const [messages, setMessages] = useState([]);
 
     const handleLogout = () => {
-        Auth.logout(); // Ensure your Auth utility handles logout
-        setUser(null); // Clear user state
+        Auth.logout(); 
+        setUser(null); 
     };
 
     const handleMessageChange = (e) => {
@@ -20,17 +20,11 @@ const Home = () => {
     const handleSendMessage = (e) => {
         e.preventDefault();
         if (message.trim() !== '') {
-            // Add the message to the messages array
-            console.log('socket in sendMessage:', socket);
-            setMessage(''); // Clear the input after sending
+            setMessage(''); 
             socket.emit('message', message);
         }
     };
-    //TODO: delete this useEffect
-    // useEffect(() => {
-    //     const longMessagesArray = Array.from({ length: 50 }, (_, i) => `This is message number ${i + 1}`);
-    //     setMessages(longMessagesArray);
-    // }, [])
+
     useEffect(() => {
         if (socket) {
             socket.on('message', (data) => {
@@ -52,7 +46,6 @@ const Home = () => {
             <p style={styles.welcomeMessage}>
                 Welcome to the home page, {user ? user.data.username : ''}
             </p>
-            {/* Message display container */}
            <MessagesDisplay messages={messages} />
 
             <form style={styles.messageContainer} onSubmit={handleSendMessage} >
@@ -78,7 +71,7 @@ const Home = () => {
     );
 };
 
-// Styles object
+
 const styles = {
     container: {
         display: 'flex',

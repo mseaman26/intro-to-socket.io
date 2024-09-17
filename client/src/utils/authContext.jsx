@@ -11,21 +11,12 @@ export const AuthProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [token, setToken] = useState(null);
 
-    //TODO: delete this useEffect
-    useEffect(() => {
-        console.log('AuthContext user:', user);
-    }, [user]);
-    useEffect(() => {
-        console.log('AuthContext loggedIn:', loggedIn);
-    }, [loggedIn]);
-
     useEffect(() => {
         const savedToken = Auth.getToken();
         setToken(prior => prior = savedToken);
         
         if(savedToken && !Auth.isTokenExpired(savedToken)){
             setUser(prior => prior = Auth.getProfile());
-            console.log('savedToken:', savedToken);
             setToken(prior => savedToken);
             
             
@@ -33,22 +24,17 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        console.log('token state: ', token);
         if(token && !Auth.isTokenExpired(token)){
             
             setUser(prior => prior = Auth.getProfile());
             setLoggedIn(prior => prior = Auth.loggedIn());
             Auth.login(token);
-            //TODO: delete this console.log
-            console.log('new token in useeffect:', token);
-            console.log('is logged in:', Auth.loggedIn());
-            console.log('token? ', token);
+
             const newSocket = io('http://localhost:3001', {
                 auth: {
                     token: token,
                 },
             });
-            console.log('newSocket:', newSocket);
             setSocket(newSocket);
 
             // Handle connection errors

@@ -5,8 +5,8 @@ import { AuthContext } from '../utils/authContext';
 
 
 const Signup = () => {
-    const { user, setUser, loggedIn, setToken } = React.useContext(AuthContext);
-    // State for form fields
+    const { setToken } = useContext(AuthContext);
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -14,10 +14,8 @@ const Signup = () => {
 
     const navigate = useNavigate();
 
-    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle signup logic here
         fetch('/api/users/signup', {
             method: 'POST',
             headers: {
@@ -27,8 +25,6 @@ const Signup = () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
-                // Redirect to home page
                 const newToken = data.token;
                 setToken(prior => prior = newToken);
                 navigate('/');
@@ -81,7 +77,6 @@ const Signup = () => {
     );
 }
 
-// Styles object
 const styles = {
     container: {
         display: 'flex',

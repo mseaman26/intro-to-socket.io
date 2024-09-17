@@ -8,8 +8,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/signup', async (req, res) => {
-    //TODO: delete this console.log
-    console.log('signup route hit');
     const { email, username, password } = req.body;
 
     try{
@@ -25,7 +23,6 @@ router.post('/signup', async (req, res) => {
         });
         const plainUser = newUser.get({plain: true});   
         const tokenData = { email: plainUser.email, username: plainUser.username, id: plainUser.id };
-        console.log('tokenData:', tokenData);
         const token = signToken(tokenData);
 
 
@@ -39,8 +36,6 @@ router.post('/signup', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    //TODO: delete this console.log
-    console.log('login route hit');
     const { email, password } = req.body;
     try{
         const user = await User.findOne({where: {email}});
