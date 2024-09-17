@@ -6,7 +6,7 @@ import { AuthContext } from '../utils/authContext';
 const Login = () => {
     const navigate = useNavigate();
     // Get user and setUser from AuthContext
-    const { user, loggedIn, setToken } = useContext(AuthContext);
+    const { user, setToken } = useContext(AuthContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -15,6 +15,7 @@ const Login = () => {
 
     // Handle form submission
     const handleSubmit = (e) => {
+        console.log('submit');
         e.preventDefault();
         fetch('/api/users/login', {
             method: 'POST',
@@ -29,8 +30,8 @@ const Login = () => {
                     return setError(data.message);
                 }
                 const newToken = data.token;
-                setToken(prior => prior = newToken);
-                navigate('/');
+                console.log('newToken', newToken);
+                setToken(newToken);
             })
             .catch(err => {
                 console.log(err);
@@ -40,7 +41,8 @@ const Login = () => {
 
     // if user is logged in, redirect to home page
     useEffect(() => {
-        if (loggedIn) {
+        console.log('user useEffect');
+        if (user) {
             navigate('/');
         }else{
             setLoading(false);

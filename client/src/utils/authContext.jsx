@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
     
     const [user, setUser] = useState(null);
 
-    const [loggedIn, setLoggedIn] = useState(false);
     const [token, setToken] = useState(null);
 
     useEffect(() => {
@@ -22,9 +21,8 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if(token && !Auth.isTokenExpired(token)){
-            
-            setUser(Auth.getProfile());
-            setLoggedIn(Auth.loggedIn());
+            console.log('context token useeffect');
+            setUser(prior => Auth.getProfile());
             Auth.login(token);
 
             
@@ -34,8 +32,18 @@ export const AuthProvider = ({ children }) => {
         }
     }, [token])
 
+    //TODO: delete this useeffect
+    useEffect(() => {
+        console.log('user useeffect: ', user?.data?.username);
+        
+    }, [user])
+    //TODO: and this one
+    useEffect(() => {
+        console.log('token useeffect: ', token);
+    }, [token])
+
     return (
-        <AuthContext.Provider value={{ user, setUser, loggedIn, token, setToken, }}>
+        <AuthContext.Provider value={{ user, setUser, token, setToken, }}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../utils/authContext';
 
 
 
 const Signup = () => {
-    const { setToken } = useContext(AuthContext);
+    const { setToken, user } = useContext(AuthContext);
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -25,15 +26,25 @@ const Signup = () => {
         })
             .then(res => res.json())
             .then(data => {
+                if (data.message) {
+                    return setError(data.message);
+                }
                 const newToken = data.token;
                 setToken(newToken);
-                navigate('/');
             })
             .catch(err => {
                 console.error(err);
                 setError('Error signing up. Please try again.');
             });
     };
+
+    useEffect(() => {
+        if (user) {
+            navigate('/');
+        }else{
+            setLoading(false);
+        }
+    }, [user]);
 
     return (
         <div style={styles.container}>

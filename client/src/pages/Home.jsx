@@ -33,7 +33,7 @@ const Home = () => {
 
             <h1 style={styles.heading}>Home</h1>
             <p style={styles.welcomeMessage}>
-                Welcome to the home page, {user ? user.data.username : ''}
+                Welcome to the hottest new chat app, {user ? user.data.username : ''}!
             </p>
            <MessagesDisplay messages={messages} />
 
