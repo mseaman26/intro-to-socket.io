@@ -13,39 +13,38 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const savedToken = Auth.getToken();
-        setToken(prior => prior = savedToken);
         
         if(savedToken && !Auth.isTokenExpired(savedToken)){
-            setUser(prior => prior = Auth.getProfile());
-            setToken(prior => savedToken);
-            
-            
+            setUser(Auth.getProfile());
+            setToken(savedToken);
         }
     }, [])
 
     useEffect(() => {
         if(token && !Auth.isTokenExpired(token)){
             
-            setUser(prior => prior = Auth.getProfile());
-            setLoggedIn(prior => prior = Auth.loggedIn());
+            setUser(Auth.getProfile());
+            setLoggedIn(Auth.loggedIn());
             Auth.login(token);
 
-            const newSocket = io('http://localhost:3001', {
-                auth: {
-                    token: token,
-                },
-            });
-            setSocket(newSocket);
+            if(!socket){
+                const newSocket = io('http://localhost:3001', {
+                    auth: {
+                        token: token,
+                    },
+                });
+                setSocket(newSocket);
+            }
 
-            // Handle connection errors
-            newSocket.on('connect_error', (err) => {
-                console.error('Socket connection error:', err.message);
-            });
 
-            // Clean up the socket when the component unmounts or user logs out
+            if(socket){
+                socket.on('connect_error', (err) => {
+                    console.error('Socket connection error:', err.message);
+                });
+            }
             return () => {
-                if (newSocket) {
-                    newSocket.disconnect();
+                if (socket) {
+                    socket.disconnect();
                 }
             };
         }

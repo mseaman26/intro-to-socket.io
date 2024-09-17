@@ -26,7 +26,7 @@ const Signup = () => {
             .then(res => res.json())
             .then(data => {
                 const newToken = data.token;
-                setToken(prior => prior = newToken);
+                setToken(newToken);
                 navigate('/');
             })
             .catch(err => {
