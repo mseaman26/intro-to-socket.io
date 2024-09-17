@@ -1,4 +1,5 @@
 const express = require('express');
+//add necessary imports
  
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -8,6 +9,7 @@ const sequelize = require('./config/connection');
 require('dotenv').config();
 
 const app = express();
+//create a server instance with http
 
 
 
@@ -24,7 +26,7 @@ app.use('/api', apiRoutes);
   
 
 
-//
+//Basic listeners for socket events
   
 
 sequelize.sync({ force: false }).then(() => {

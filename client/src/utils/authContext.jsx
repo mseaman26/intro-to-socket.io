@@ -22,7 +22,8 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if(token && !Auth.isTokenExpired(token)){
             console.log('context token useeffect');
-            setUser(prior => Auth.getProfile());
+            //using the function form of setUser to avoid stale closure
+            setUser(() => Auth.getProfile());
             Auth.login(token);
 
             
