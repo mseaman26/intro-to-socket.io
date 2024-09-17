@@ -12,12 +12,6 @@ require('dotenv').config({ path: require('find-config')('.env') });
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({
-    origin: "http://localhost:3000",  // Allow requests from Vite frontend
-    methods: ["GET", "POST"],
-    credentials: true  // Allow cookies and other credentials
-}));
-
 const io = socketIo(server, {
     cors: {
         origin: "http://localhost:3000",  // Allow requests from your Vite frontend
