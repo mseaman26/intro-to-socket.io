@@ -1,25 +1,32 @@
 const express = require('express');
 //add necessary imports
- 
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+
 const bodyParser = require('body-parser');
 const apiRoutes = require('./apiRoutes');
 const sequelize = require('./config/connection');
 require('dotenv').config();
 
 const app = express();
+
+// Middleware to parse request bodies and use API routes
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/api', apiRoutes);
+
 //create a server instance with http
-
-
+const server = http.createServer(app);
+//bind socket.io instance to server
+const io = socketIo(server, {
+    cors: {
+        origin: "http://localhost:3000",  
+        methods: ["GET", "POST"]          
+    }
+}); 
 
 const PORT = 3001;
 
 
-// Middleware to parse JSON bodies
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api', apiRoutes);
+
 
 // Middleware to authenticate socket connection with JWT
 
@@ -27,7 +34,8 @@ app.use('/api', apiRoutes);
 
 
 //Basic listeners for socket events
-  
+
+
 
 sequelize.sync({ force: false }).then(() => {
     app.listen(PORT, () => {

@@ -1,10 +1,11 @@
+//we want this component to be able to send and recieve messages
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../utils/authContext.jsx';
 import Auth from '../utils/auth'; 
 import MessagesDisplay from '../components/MessagesDisplay.jsx';
 
 const Home = () => {
-    const { user, setUser } = useContext(AuthContext);
+    const { user, setUser, socket  } = useContext(AuthContext);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
 
@@ -20,18 +21,18 @@ const Home = () => {
     const handleSendMessage = (e) => {
         e.preventDefault();
         if (message.trim() !== '') {
+            //emit message to server via socket
             setMessage(''); 
             
         }
     };
 
-    
 
     return (
         <div style={styles.container}>
             
 
-            <h1 style={styles.heading}>Home</h1>
+            <h1 style={styles.heading}>Chat App</h1>
             <p style={styles.welcomeMessage}>
                 Welcome to the hottest new chat app, {user ? user.data.username : ''}!
             </p>

@@ -15,7 +15,6 @@ const Login = () => {
 
     // Handle form submission
     const handleSubmit = (e) => {
-        console.log('submit');
         e.preventDefault();
         fetch('/api/users/login', {
             method: 'POST',
@@ -30,7 +29,6 @@ const Login = () => {
                     return setError(data.message);
                 }
                 const newToken = data.token;
-                console.log('newToken', newToken);
                 setToken(newToken);
             })
             .catch(err => {
@@ -41,7 +39,6 @@ const Login = () => {
 
     // if user is logged in, redirect to home page
     useEffect(() => {
-        console.log('user useEffect');
         if (user) {
             navigate('/');
         }else{
