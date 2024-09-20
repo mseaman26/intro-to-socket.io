@@ -24,7 +24,7 @@ npm install
 ```bash
 source db/schema.sql
 ```
-### Step 5: Install Project Dependencies
+### Step 5: Start the Project
 At the root level of the project, run the following command to start the development server:
 
 ```bash
