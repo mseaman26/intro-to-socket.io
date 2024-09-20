@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
             //using the function form of setUser to avoid stale closure
             setUser(() => Auth.getProfile());
             Auth.login(token);
-            //set up socket connection
+            //initialize up socket connection
  
         }
     }, [token])
