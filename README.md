@@ -1,9 +1,8 @@
 # How to Run This Project
 
 ### Step 1: Create a `.env` File in the "server" Folder
-In the "server" folder of the project, create a `.env` file.
 
-### Step 2: Add the Following Variables to the `.env` File
+### Step 2: Add Variables to the `.env` File
 Add the following environment variables to your `.env` file:
 
 - `DB_NAME`: (string) A name for your MySQL database.
