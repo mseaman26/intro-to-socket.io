@@ -5,7 +5,7 @@ import Auth from '../utils/auth';
 import MessagesDisplay from '../components/MessagesDisplay.jsx';
 
 const Home = () => {
-    const { user, setUser, socket  } = useContext(AuthContext);
+    const { user, setUser, socket } = useContext(AuthContext);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
 
@@ -22,11 +22,29 @@ const Home = () => {
         e.preventDefault();
         if (message.trim() !== '') {
             //emit message to server via socket
-            setMessage(''); 
-            
+            socket.emit('message', message)
+            setMessage('');  
+
         }
     };
 
+    useEffect(() => {
+        if(socket){
+            socket.on('message', (data) => {
+                const msg = data.message
+                const username = data.username
+                const displayMessage = `${username}: ${msg}`
+                setMessages((prior) => [...prior, displayMessage])
+            })
+        }
+        //clean up event listeners
+        return () => {
+            if(socket){
+                socket.off('message')
+            }
+        }
+     
+    }, [socket])
 
     return (
         <div style={styles.container}>

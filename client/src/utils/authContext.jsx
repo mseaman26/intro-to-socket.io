@@ -1,8 +1,7 @@
 import { createContext , useState, useEffect} from "react";
 import Auth from "./auth";
 //import socket.io-client
-
-
+import { io } from 'socket.io-client'
 
 export const AuthContext = createContext();
 
@@ -10,6 +9,7 @@ export const AuthProvider = ({ children }) => {
     
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
+    const [socket, setSocket] = useState(null)
 
 
     useEffect(() => {
@@ -28,13 +28,44 @@ export const AuthProvider = ({ children }) => {
             setUser(() => Auth.getProfile());
             Auth.login(token);
             //initialize up socket connection
- 
+            if(!socket){
+                const newSocket = io('http://localhost:3001', {
+                    auth: {
+                        token: token
+                    }
+                })
+                setSocket(newSocket)
+            }
+            return () => {
+                if(socket){
+                    socket.disconnect()
+                }
+            }
         }
     }, [token])
 
+    useEffect(() => {
+        if(socket){
+            socket.on('connect', () => {
+                console.log('connected!')
+            })
+            socket.on('hello', () => {
+                console.log('i see you, server!')
+            })
+            socket.emit('hello')
+        }
+        //clean up event listeners
+        return () => {
+            if(socket){
+                socket.off('connect')
+                socket.off('hello')
+            }
+        }
+    }, [socket])
+
 
     return (
-        <AuthContext.Provider value={{ user, setUser, token, setToken }}>
+        <AuthContext.Provider value={{ user, setUser, token, setToken, socket }}>
             {children}
         </AuthContext.Provider>
     );
